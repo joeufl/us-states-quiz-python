@@ -27,8 +27,8 @@ while len(guessed_states) < 50:
     if answer_state == "Exit":
         # On Exit Game store remaining states into csv
         missing_states = [state for state in state_list if state not in guessed_states]
-        states_to_learn = pandas.DataFrame(missing_states)
-        states_to_learn.to_csv("./data/states_to_learn.csv")
+        states_to_learn = pandas.DataFrame(missing_states,columns=["state"])
+        states_to_learn.to_csv("./data/states_to_learn.csv",index=False)
         break
 
     #Check user answer, get coordinates
