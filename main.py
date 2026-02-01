@@ -18,29 +18,62 @@ guessed_states = []
 data = pandas.read_csv("./data/50_states.csv")
 state_list = data["state"].to_list()
 
-#Game setup
-while len(guessed_states) < 50:
-    #User Input
-    answer_state = screen.textinput(title=f"{len(guessed_states)}/50 Guess the State",
-                                    prompt="What´s another state´s name?").title()
-    #Exit the game
-    if answer_state == "Exit":
-        # On Exit Game store remaining states into csv
-        missing_states = [state for state in state_list if state not in guessed_states]
-        states_to_learn = pandas.DataFrame(missing_states,columns=["state"])
-        states_to_learn.to_csv("./data/states_to_learn.csv",index=False)
-        break
+current_text = ""
 
-    #Check user answer, get coordinates
-    for state in state_list:
-        if answer_state == state:
-            #Create turtle to write name of the state
-            t = turtle.Turtle()
-            t.hideturtle()
-            t.up()
-            state_row = data[data.state == answer_state]
-            t.goto(state_row.x.item(), state_row.y.item())
-            t.write(f"{state}")
-            #Add new hits to guessed list
-            if answer_state not in guessed_states:
-                guessed_states.append(state)
+input_writer = turtle.Turtle()
+input_writer.hideturtle()
+input_writer.penup()
+input_writer.goto(-200, 260)  # top-left-ish above map
+
+def draw_input():
+    input_writer.clear()
+    input_writer.write(
+        f"{len(guessed_states)}/50  Guess a state: {current_text}",
+        font=("Arial", 16, "normal")
+    )
+
+def submit_answer():
+    global current_text
+    answer_state = current_text.title()
+    current_text = ""
+    draw_input()
+
+    if answer_state == "Exit":
+        missing_states = [s for s in state_list if s not in guessed_states]
+        pandas.DataFrame(missing_states,columns=["state"]).to_csv(
+            "./data/states_to_learn.csv",
+            index=False
+        )
+        screen.bye()
+        return
+
+    if answer_state in state_list and answer_state not in guessed_states:
+        state_row = data[data.state == answer_state]
+        t = turtle.Turtle()
+        t.hideturtle()
+        t.penup()
+        t.goto(state_row.x.item(), state_row.y.item())
+        t.write(answer_state)
+        guessed_states.append(answer_state)
+    draw_input()
+
+def add_char(char):
+    global current_text
+    current_text += char
+    draw_input()
+
+def backspace():
+    global current_text
+    current_text = current_text[:-1]
+    draw_input()
+
+screen.listen()
+
+for letter in "abcdefghijklmnopqrstuvwxyz":
+    screen.onkey(lambda l=letter: add_char(l), letter)
+
+screen.onkey(backspace, "BackSpace")
+screen.onkey(submit_answer, "Return")
+
+draw_input()
+turtle.mainloop()
