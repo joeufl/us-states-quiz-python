@@ -31,15 +31,16 @@ If you type `"Exit"`, the game ends and automatically creates a `CSV file` conta
 
 - pandas (for data handling and CSV export)
 
-📁 Project Structure
-📦 us_game
- ┣ 📂 data
- ┃ ┣ 50_states.csv          # List of all 50 U.S. states with coordinates (state, x, y)
- ┃ ┗ states_to_learn.csv    # Generated after quitting — contains unguessed states
- ┣ 📂 images
- ┃ ┗ blank_states_img.gif   # Map of the U.S. used for the quiz background
- ┣ main.py                  # Main game script
- ┗ README.md                # This file
+## 📁 Project Structure
+
+- 📦 **us-states-quiz-game/**
+  - 📂 **data/**
+    - `50_states.csv` — List of all 50 U.S. states with coordinates (state, x, y)
+    - `states_to_learn.csv` — Generated after quitting; contains unguessed states
+  - 📂 **images/**
+    - `blank_states_img.gif` — Map of the U.S. used for the quiz background
+  - `main.py` — Main game script
+  - `README.md` — This file
 
 ## ▶️ How to Play
 
